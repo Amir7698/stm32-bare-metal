@@ -1,1 +1,10 @@
+# Reference manuals (large PDFs)
 docs/
+
+# Build outputs
+*.o
+*.elf
+*.bin
+*.hex
+*.map
+*.d
