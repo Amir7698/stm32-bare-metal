@@ -53,4 +53,17 @@ typedef struct
 
 #define RCC ((RCC_TypeDef *)RCC_BASE)
 
+/* ===== SysTick (Cortex-M4 core peripheral) ===== */
+#define SYSTICK_BASE (0xE000E010UL)
+
+typedef struct
+{
+    volatile uint32_t CTRL;
+    volatile uint32_t LOAD;
+    volatile uint32_t VAL;
+    volatile uint32_t CALIB;
+} SYSTICK_TypeDef;
+
+#define SYSTICK ((SYSTICK_TypeDef *)SYSTICK_BASE)
+
 #endif

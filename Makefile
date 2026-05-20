@@ -12,7 +12,7 @@ CFLAGS  = $(CPU) -Wall -O0 -g -Iinc -ffreestanding
 LDFLAGS = $(CPU) -Tlinker/stm32f446re.ld -nostdlib -Wl,--gc-sections
 
 # === Sources ===
-C_SRCS   = src/main.c
+C_SRCS   = src/main.c src/systick.c
 ASM_SRCS = startup/startup_stm32f446re.s
 
 # === Objects ===

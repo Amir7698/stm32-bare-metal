@@ -1,7 +1,9 @@
 #include "stm32f446xx.h"
+#include "systick.h"
 
 int main(void)
 {
+    systick_init();
     /* 1. Enable clock for GPIOA */
     RCC->AHB1ENR |= (1 << 0);
 
@@ -12,8 +14,6 @@ int main(void)
     while (1)
     {
         GPIOA->ODR ^= (1 << 5);
-        for (volatile uint32_t i = 0; i < 1000000; i++) /* waste ~40 ms: 100000 loops × 6 cycles each, at 16 MHz => 600 000 / 16 000 000 = 40ms */
-        {
-        }
+        delay_ms(500);
     }
 }

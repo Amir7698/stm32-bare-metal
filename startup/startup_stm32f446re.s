@@ -5,6 +5,9 @@
 
 .global vector_table
 .global Reset_Handler
+.global SysTick_Handler
+.weak   SysTick_Handler
+.thumb_set SysTick_Handler, Default_Handler
 
 /* Symbols from the linker script */
 .word _sidata    /* start of .data init values in flash */
@@ -81,5 +84,5 @@ vector_table:
     .word Default_Handler      /* DebugMonitor */
     .word 0
     .word Default_Handler      /* PendSV */
-    .word Default_Handler      /* SysTick */
-.size vector_table, .-vector_table
+    .word SysTick_Handler      /* SysTick */
+    .size vector_table, .-vector_table
