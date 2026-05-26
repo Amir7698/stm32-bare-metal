@@ -1,18 +1,17 @@
 # STM32 Bare-Metal PWM Driver
 
-Register-level firmware for STM32F446RE (NUCLEO board) written from scratch — no HAL, no Cube, no CMSIS abstraction. The goal is a working, scope-verified PWM driver that demonstrates direct register manipulation, interrupt-driven timing, and a clean Make-based build pipeline.
-
-> 🚧 **Work in progress** — building incrementally as a portfolio project for embedded firmware roles.
+Register-level firmware for the STM32F446RE (NUCLEO-F446RE) written from scratch — no HAL, no CubeMX, no CMSIS abstraction. The project demonstrates direct register manipulation, interrupt-driven timing, hardware-driven PWM, and a clean Make-based build pipeline.
 
 ---
 
 ## What's working today
 
-- ✅ **Bare-metal GPIO toggle** — PA5 (onboard green LED) driven via direct register writes
+- ✅ **Bare-metal GPIO** — PA5 (onboard green LED LD2) driven via direct register writes
 - ✅ **Custom build system** — Makefile, linker script, startup file, ARM GCC toolchain (no IDE lock-in)
 - ✅ **SysTick timing** — Cortex-M4 SysTick configured for 1 ms interrupts, with `delay_ms()` and `millis()` API
-- ✅ **Interrupt-driven** — `SysTick_Handler` hooked into the vector table, increments a millisecond counter
-- ✅ **LED blinks at exactly 1 Hz** on hardware, verified visually
+- ✅ **Interrupt-driven** — `SysTick_Handler` hooked into the vector table, increments a millisecond tick counter
+- ✅ **Hardware PWM driver** — TIM2 channel 1 routed to PA5 via alternate function AF1, 1 kHz PWM, runtime duty control
+- ✅ **Smooth LED fade** — main loop sweeps duty 0 → 999 → 0, fully driven by the timer hardware in the background
 
 ---
 
@@ -23,9 +22,9 @@ Register-level firmware for STM32F446RE (NUCLEO board) written from scratch — 
 | 0 — Toolchain setup (MSYS2, ARM GCC, STM32_Programmer_CLI) | ✅ Done        |
 | 1 — GPIO + bare-metal blink                                | ✅ Done        |
 | 2 — SysTick precise timing                                 | ✅ Done        |
-| 3 — Timer/PWM driver (multi-channel, runtime config)       | ⏭️ In progress |
-| 4 — Scope verification + documentation polish              | ⏭️ Planned     |
-| 5 — Host-side unit tests (Unity) **OR** GitHub Actions CI  | ⏭️ Planned     |
+| 3 — Timer/PWM driver (TIM2 CH1 on PA5, runtime duty)       | ✅ Done        |
+| 4 — Documentation polish + memory analysis                 | ⏭️ In progress |
+| 5 — Host-side unit tests **OR** GitHub Actions CI          | ⏭️ Planned     |
 
 ---
 
@@ -47,19 +46,19 @@ make flash       # flash to the board over SWD and reset
 make clean       # remove build artifacts
 ```
 
-Current firmware size: **348 B flash, ~1.5 KB RAM** (mostly reserved stack).
-
----
+## Current firmware size: **~664 B flash, ~1.5 KB RAM** (mostly reserved stack).
 
 ## Project structure
 
 stm32-bare-metal/
 ├── inc/
-│ ├── stm32f446xx.h # Register definitions (GPIO, RCC, SysTick)
-│ └── systick.h # SysTick driver API
+│ ├── stm32f446xx.h # Register definitions (GPIO, RCC, SysTick, TIM)
+│ ├── systick.h # SysTick driver API
+│ └── timer.h # PWM timer driver API
 ├── src/
-│ ├── main.c # Application: 1 Hz LED blink on PA5
-│ └── systick.c # SysTick driver implementation
+│ ├── main.c # Application: smooth LED fade on PA5
+│ ├── systick.c # SysTick driver implementation
+│ └── timer.c # TIM2 PWM driver implementation
 ├── startup/
 │ └── startup_stm32f446re.s # Reset handler + vector table
 ├── linker/
