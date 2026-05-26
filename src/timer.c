@@ -13,8 +13,22 @@
 void timer_init(TIM_TypeDef *tim, uint32_t fr_hz)
 {
     RCC->APB1ENR |= (1 << 0);
+    RCC->AHB1ENR |= (1 << 0); // wake GPIOA
+
+    GPIOA->MODER &= ~(3 << 10);
+    GPIOA->MODER |= (2 << 10);
+
+    GPIOA->AFR[0] &= ~(0xF << 20);
+    GPIOA->AFR[0] |= (0x1 << 20);
+
+    tim->CCMR1 &= ~(7 << 4);
+    tim->CCMR1 |= (6 << 4);
+
+    tim->CCER |= (1 << 0);
     tim->PSC = ((16000000 / (fr_hz * 1000)) - 1);
     tim->ARR = 999;
+
+    tim->EGR |= (1 << 0);
     tim->CR1 |= (1 << 0);
 }
 
