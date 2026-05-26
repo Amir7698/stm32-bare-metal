@@ -50,22 +50,22 @@ make clean       # remove build artifacts
 
 ## Project structure
 
+```
 stm32-bare-metal/
 ├── inc/
-│ ├── stm32f446xx.h # Register definitions (GPIO, RCC, SysTick, TIM)
-│ ├── systick.h # SysTick driver API
-│ └── timer.h # PWM timer driver API
+│   ├── stm32f446xx.h          # Register definitions (GPIO, RCC, SysTick, TIM)
+│   ├── systick.h              # SysTick driver API
+│   └── timer.h                # PWM timer driver API
 ├── src/
-│ ├── main.c # Application: smooth LED fade on PA5
-│ ├── systick.c # SysTick driver implementation
-│ └── timer.c # TIM2 PWM driver implementation
+│   ├── main.c                 # Application: smooth LED fade on PA5
+│   ├── systick.c              # SysTick driver implementation
+│   └── timer.c                # TIM2 PWM driver implementation
 ├── startup/
-│ └── startup_stm32f446re.s # Reset handler + vector table
+│   └── startup_stm32f446re.s  # Reset handler + vector table
 ├── linker/
-│ └── stm32f446re.ld # Memory layout (512 KB flash, 128 KB RAM)
-└── Makefile # Build pipeline
-
----
+│   └── stm32f446re.ld         # Memory layout (512 KB flash, 128 KB RAM)
+└── Makefile                   # Build pipeline
+```
 
 ## Why bare-metal?
 
